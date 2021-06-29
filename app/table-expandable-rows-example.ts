@@ -1,5 +1,17 @@
-import { Component, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  Component,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+  ChangeDetectorRef
+} from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 
@@ -14,12 +26,14 @@ import { MatTableDataSource, MatTable } from '@angular/material/table';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      )
+    ])
+  ]
 })
 export class TableExpandableRowsExample {
-
   @ViewChild('outerSort', { static: true }) sort: MatSort;
   @ViewChildren('innerSort') innerSort: QueryList<MatSort>;
   @ViewChildren('innerTables') innerTables: QueryList<MatTable<Address>>;
@@ -27,17 +41,22 @@ export class TableExpandableRowsExample {
   dataSource: MatTableDataSource<User>;
   usersData: User[] = [];
   columnsToDisplay = ['name', 'email', 'phone'];
-  innerDisplayedColumns = ['street', 'zipCode', 'city'];
+  innerDisplayedColumns = ['street', 'zipcode', 'city'];
   expandedElement: User | null;
 
-  constructor(
-    private cd: ChangeDetectorRef
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     USERS.forEach(user => {
-      if (user.addresses && Array.isArray(user.addresses) && user.addresses.length) {
-        this.usersData = [...this.usersData, {...user, addresses: new MatTableDataSource(user.addresses)}];
+      if (
+        user.addresses &&
+        Array.isArray(user.addresses) &&
+        user.addresses.length
+      ) {
+        this.usersData = [
+          ...this.usersData,
+          { ...user, addresses: new MatTableDataSource(user.addresses) }
+        ];
       } else {
         this.usersData = [...this.usersData, user];
       }
@@ -47,13 +66,27 @@ export class TableExpandableRowsExample {
   }
 
   toggleRow(element: User) {
-    element.addresses && (element.addresses as MatTableDataSource<Address>).data.length ? (this.expandedElement = this.expandedElement === element ? null : element) : null;
+    element.addresses &&
+    (element.addresses as MatTableDataSource<Address>).data.length
+      ? (this.expandedElement =
+          this.expandedElement === element ? null : element)
+      : null;
     this.cd.detectChanges();
-    this.innerTables.forEach((table, index) => (table.dataSource as MatTableDataSource<Address>).sort = this.innerSort.toArray()[index]);
+    this.innerTables.forEach(
+      (table, index) =>
+        ((table.dataSource as MatTableDataSource<
+          Address
+        >).sort = this.innerSort.toArray()[index])
+    );
   }
 
   applyFilter(filterValue: string) {
-    this.innerTables.forEach((table, index) => (table.dataSource as MatTableDataSource<Address>).filter = filterValue.trim().toLowerCase());
+    this.innerTables.forEach(
+      (table, index) =>
+        ((table.dataSource as MatTableDataSource<
+          Address
+        >).filter = filterValue.trim().toLowerCase())
+    );
   }
 }
 
@@ -79,46 +112,45 @@ export interface UserDataSource {
 
 const USERS: User[] = [
   {
-    name: "Mason",
-    email: "mason@test.com",
-    phone: "9864785214",
+    name: 'Mason',
+    email: 'mason@test.com',
+    phone: '9864785214',
     addresses: [
       {
-        street: "Street 1",
-        zipCode: "78542",
-        city: "Kansas"
+        street: 'Street 1',
+        zipCode: '78542',
+        city: 'Kansas'
       },
       {
-        street: "Street 2",
-        zipCode: "78554",
-        city: "Texas"
+        street: 'Street 2',
+        zipCode: '78554',
+        city: 'Texas'
       }
     ]
   },
   {
-    name: "Eugene",
-    email: "eugene@test.com",
-    phone: "8786541234",
+    name: 'Eugene',
+    email: 'eugene@test.com',
+    phone: '8786541234'
   },
   {
-    name: "Jason",
-    email: "jason@test.com",
-    phone: "7856452187",
+    name: 'Jason',
+    email: 'jason@test.com',
+    phone: '7856452187',
     addresses: [
       {
-        street: "Street 5",
-        zipCode: "23547",
-        city: "Utah"
+        street: 'Street 5',
+        zipCode: '23547',
+        city: 'Utah'
       },
       {
-        street: "Street 5",
-        zipCode: "23547",
-        city: "Ohio"
+        street: 'Street 5',
+        zipCode: '23547',
+        city: 'Ohio'
       }
     ]
   }
 ];
-
 
 /**  Copyright 2019 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
